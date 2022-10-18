@@ -31,11 +31,22 @@ class ProgramaPrincipal:
                 modelo = input("Por favor ingrese el nombre del modelo: ")
                 automovil_a_eliminar=Automovil(marca,modelo)
                 automovil_a_eliminar.delete_automoviles()
+
+            
+            if nro ==4:
+                disponibilidad = Automovil(marca,modelo)
+                disponibilidad.cargar_disponibilidad()
+
+            if nro ==5:
+                print("Marca" " " "Modelo" " " "Precio" " " "Cantidad disponible")
+                Listado_Automoviles = Automovil(marca,modelo,precio,cantidadDisponibles)
+                Listado_Automoviles.listado_automoviles()
+
                             
             if nro==0:
                 break
     
-    def crearTablas(self):   #Esto, es esto? La marca y modelo declararlo como Único e irrepetible. Llevar también a cabo un id como primary key autoincremental.
+    def crearTablas(self):
         conexion = Conexiones()
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS AUTOMOVILES")
@@ -57,6 +68,7 @@ class Automovil:
             conexion.miCursor.execute("INSERT INTO AUTOMOVILES(marca,modelo,precio,cantidadDisponibles) VALUES('{}', '{}','{}','{}')".format(self.marca, self.modelo,self.precio,self.cantidadDisponibles))
             conexion.miConexion.commit()
             print("Automovil cargado exitosamente")
+            input()
         except:
             print("Error al agregar un automovil")
         finally:
@@ -70,6 +82,7 @@ class Automovil:
             conexion.miCursor.execute("UPDATE AUTOMOVILES SET precio='{}' where marca='{}' and modelo='{}' ".format(self.precio,self.marca,self.modelo))
             conexion.miConexion.commit()
             print("Automovil modificado correctamente")
+            input()
         except:
             print('Error al actualizar un automovil')
         finally:
@@ -83,6 +96,7 @@ class Automovil:
             conexion.miCursor.execute("DELETE FROM AUTOMOVILES  where marca='{}' and modelo='{}' ".format(self.marca,self.modelo))
             conexion.miConexion.commit()
             print("Automovil eliminado correctamente")
+            input()
         except:
             print('Error al eliminar un automovil')
         finally:
@@ -95,12 +109,27 @@ class Automovil:
             conexion.miCursor.execute("UPDATE AUTOMOVILES SET cantidadDisponibles=cantidadDisponibles+1 where marca='{}' and modelo='{}' ".format(self.marca,self.modelo))
             conexion.miConexion.commit()
             print("Automovil modificado correctamente")
+            input()
         except:
             print('Error al actualizar un automovil')
         finally:
             conexion.cerrarConexion()  
     
-
+    def listado_automoviles(self): #Consigna nro5
+        conexion = Conexiones()
+        conexion.abrirConexion()
+        try:
+            conexion.miCursor.execute("SELECT * FROM AUTOMOVILES")
+            autos=conexion.miCursor.fetchall()
+            for auto in autos: 
+                a,b,c,d,*rest = auto
+                concatenado=f"{a} {b} {c} {d}"
+                print(concatenado)
+            input()
+        except:     
+            print('Error al ejecutar')
+        finally:
+            conexion.cerrarConexion()
 
     
 class Conexiones:

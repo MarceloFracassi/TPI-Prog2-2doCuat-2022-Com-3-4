@@ -131,7 +131,46 @@ class Automovil:
         finally:
             conexion.cerrarConexion()
 
+    def crearTablas(self): #consigna nro6
+        conexion = Conexiones()
+        conexion.abrirConexion()
+        conexion.miCursor.execute("DROP TABLE IF EXISTS MOTOCICLETA")
+        conexion.miCursor.execute("CREATE TABLE MOTOCICLETA (id_moto INTEGER PRIMARY KEY , modelo  VARCHAR(30) ,marca  VARCHAR(30),precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATATIME, NOT UNIQUE(marca,modelo))")    
+        conexion.miConexion.commit()       
+        conexion.cerrarConexion()
+
+#quiza hay que crear otro archivo?? 
+@dataclass
+class Motocicleta():
+    #def __init__(self, modelo, marca, precio, color, fechaUltimoPrecio):
+    modelo: str
+    marca: str
+    precio: int
+    color: str
+    fechaUltimoPrecio: str
+    #no se si se podrá hacer con un data class o con el contructor como arriba
+
+    def crearTablas(self): #consigna nro7
+        conexion = Conexiones()
+        conexion.abrirConexion()
+        conexion.miCursor.execute("DROP TABLE IF EXISTS HISTORICO_MOTOCICLETA")
+        conexion.miCursor.execute("CREATE TABLE HISTORICO_MOTOCICLETA (id_moto INTEGER PRIMARY KEY , modelo  VARCHAR(30) ,marca  VARCHAR(30),precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATATIME, NOT UNIQUE(marca,modelo))")    
+        conexion.miConexion.commit()       
+        conexion.cerrarConexion()
     
+    def modificar_moto(self):
+        conexion = Conexiones()
+        conexion.abrirConexion()
+        try:
+            conexion.miCursor.execute("UPDATE MOTOCICLETA SET precio=(precio*10)/100 where marca='{}' and modelo='{}' ".format(self.precio,self.marca,self.modelo))
+            conexion.miConexion.commit()
+            print("Motocicleta modificado correctamente")
+            input()
+        except:
+            print('Error al actualizar una monoticleta')
+        finally:
+            conexion.cerrarConexion()  
+
 class Conexiones:
     
     def abrirConexion(self):

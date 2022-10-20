@@ -2,7 +2,7 @@ import sqlite3
 from dataclasses import dataclass
 
 class ProgramaPrincipal:
-
+                    #no cazo una :3 
     def menu(self):
         while True:
             print("Menu de opciones Concesionaria")
@@ -38,8 +38,7 @@ class ProgramaPrincipal:
                 disponibilidad.cargar_disponibilidad()
             if nro ==5:
                 print("Marca" " " "Modelo" " " "Precio" " " "Cantidad disponible")
-                Listado_Automoviles = Automovil(marca,modelo,precio,cantidadDisponibles)
-                Listado_Automoviles.listado_automoviles()
+                Automovil.listado_automoviles()
             if nro==6: 
                 modelo = input("Por favor ingrese el modelo de la motocicleta: ")
                 marca = input("Por favor ingrese la marca de la motocicleta: ")
@@ -70,7 +69,7 @@ class ProgramaPrincipal:
         conexion = Conexiones()
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS MOTOCICLETA")                      #autoincrementa
-        conexion.miCursor.execute("CREATE TABLE MOTOCICLETA (id_moto INTEGER PRIMARY KEY AUTOINCREMENT, modelo  VARCHAR(30) , marca  VARCHAR(30), precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATATIME)")    
+        conexion.miCursor.execute("CREATE TABLE MOTOCICLETA (id_moto INTEGER PRIMARY KEY AUTOINCREMENT, modelo  VARCHAR(30) , marca  VARCHAR(30), precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATETIME DEFAULT CURRENT_TIMESTAMP)")    
         conexion.miConexion.commit()       
         conexion.cerrarConexion()
 
@@ -79,7 +78,7 @@ class ProgramaPrincipal:
         conexion = Conexiones()
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS HISTORICO_MOTOCICLETA")
-        conexion.miCursor.execute("CREATE TABLE HISTORICO_MOTOCICLETA (id_moto INTEGER PRIMARY KEY , modelo  VARCHAR(30) ,marca  VARCHAR(30),precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATATIME)")    
+        conexion.miCursor.execute("CREATE TABLE HISTORICO_MOTOCICLETA (id_moto INTEGER, modelo  VARCHAR(30), marca VARCHAR(30), precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATETIME)")    
         conexion.miConexion.commit()       
         conexion.cerrarConexion()
 
@@ -143,8 +142,8 @@ class Automovil:
             print('Error al actualizar un automovil')
         finally:
             conexion.cerrarConexion()  
-    
-    def listado_automoviles(self): #Consigna nro5
+    @classmethod
+    def listado_automoviles(cls): #Consigna nro5
         conexion = Conexiones()
         conexion.abrirConexion()
         try:

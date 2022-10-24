@@ -44,9 +44,10 @@ class ProgramaPrincipal:
                 if nro==6: 
                     modelo = input("Por favor ingrese el modelo de la motocicleta: ")
                     marca = input("Por favor ingrese la marca de la motocicleta: ")
+                    cilindrada = input("Por favor ingrese la cilindrada de la motocicleta: ")
                     precio = input("Por favor ingrese el precio de la motocicleta: ")
                     color = input("Por favor ingrese el color de la motocicleta: ")
-                    crear_tabla_motocicleta= Motocicleta(modelo, marca, precio, color)
+                    crear_tabla_motocicleta= Motocicleta(modelo, marca, cilindrada, precio, color)
                     crear_tabla_motocicleta.cargar_motocicleta()
                     crear_tabla_motocicleta.carga_historial()
                 if nro ==7:
@@ -65,9 +66,9 @@ class ProgramaPrincipal:
         conexion.miCursor.execute("DROP TABLE IF EXISTS AUTOMOVILES")
         conexion.miCursor.execute("CREATE TABLE AUTOMOVILES (id_automovil INTEGER PRIMARY KEY , marca  VARCHAR(30) ,modelo  VARCHAR(30),precio FLOAT NOT NULL, cantidadDisponibles INTEGER NOT NULL,UNIQUE(marca,modelo))")    
         conexion.miCursor.execute("DROP TABLE IF EXISTS MOTOCICLETA")                      #autoincrementa
-        conexion.miCursor.execute("CREATE TABLE MOTOCICLETA (id_moto INTEGER PRIMARY KEY AUTOINCREMENT, modelo  VARCHAR(30) , marca  VARCHAR(30), precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATETIME DEFAULT CURRENT_TIMESTAMP)") 
+        conexion.miCursor.execute("CREATE TABLE MOTOCICLETA (id_moto INTEGER PRIMARY KEY AUTOINCREMENT, modelo  VARCHAR(30) , marca  VARCHAR(30), cilindrada VARCHAR(30), precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATETIME DEFAULT CURRENT_TIMESTAMP)") 
         conexion.miCursor.execute("DROP TABLE IF EXISTS HISTORICO_MOTOCICLETA")
-        conexion.miCursor.execute("CREATE TABLE HISTORICO_MOTOCICLETA (id_moto INTEGER, modelo  VARCHAR(30) ,marca  VARCHAR(30),precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATETIME)") 
+        conexion.miCursor.execute("CREATE TABLE HISTORICO_MOTOCICLETA (id_moto INTEGER, modelo  VARCHAR(30) , marca  VARCHAR(30), cilindrada VARCHAR(30), precio INTEGER NOT NULL, color VARCHAR(30), fechaUltimoPrecio DATETIME)") 
         conexion.miConexion.commit()       
         conexion.cerrarConexion()
 
@@ -148,9 +149,10 @@ class Automovil:
             conexion.cerrarConexion()
 
 class Motocicleta:
-    def __init__(self, modelo, marca, precio, color):
+    def __init__(self, modelo, marca, cilindrada, precio, color):
         self.modelo = modelo
         self.marca = marca
+        self.cilindrada = cilindrada
         self.precio = precio
         self.color = color
 
@@ -158,7 +160,7 @@ class Motocicleta:
         conexion = Conexiones()
         conexion.abrirConexion()
         try:                                                                                                    
-            conexion.miCursor.execute("INSERT INTO MOTOCICLETA(modelo,marca,precio,color) VALUES('{}', '{}','{}','{}')".format(self.modelo, self.marca,self.precio,self.color))
+            conexion.miCursor.execute("INSERT INTO MOTOCICLETA(modelo,marca,cilindrada,precio,color) VALUES('{}','{}','{}','{}','{}')".format(self.modelo, self.marca, self.cilindrada, self.precio, self.color))
             conexion.miConexion.commit()
             print("Motocicleta cargada exitosamente")
             input()
@@ -171,7 +173,7 @@ class Motocicleta:
         conexion = Conexiones()
         conexion.abrirConexion()
         try:                                                                                                    
-            conexion.miCursor.execute("INSERT INTO HISTORICO_MOTOCICLETA(modelo,marca,precio,color) VALUES('{}', '{}','{}','{}')".format(self.modelo, self.marca,self.precio,self.color))
+            conexion.miCursor.execute("INSERT INTO HISTORICO_MOTOCICLETA(modelo,marca,cilindrada,precio,color) VALUES('{}','{}','{}','{}','{}')".format(self.modelo, self.marca, self.cilindrada, self.precio, self.color))
             conexion.miConexion.commit()
             print("Historial cargado exitosamente")
             input()

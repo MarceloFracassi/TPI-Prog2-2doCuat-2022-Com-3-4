@@ -51,14 +51,16 @@ class ProgramaPrincipal:
                     crear_tabla_motocicleta.cargar_motocicleta()
                     crear_tabla_motocicleta.carga_historial()
                 if nro ==7:
-                    print("Se modifico el precio un 10%")
-                    motocicleta_a_modificar= Motocicleta()
+                    print('h')
+                    motocicleta_a_modificar = Motocicleta(precio)
                     motocicleta_a_modificar.modificar_moto()
                 if nro==0:
                     break
             except: 
                 print('Por favor ingrese un numero y no una letra')
                 continue     
+
+
     #TABLA DE AUTOMOVILES
     def crearTablas(self):
         conexion = Conexiones()
@@ -91,7 +93,7 @@ class Automovil:
             print("Error al agregar un automovil")
         finally:
             conexion.cerrarConexion()
-     
+
     def modificar_automoviles(self):
         conexion = Conexiones()
         conexion.abrirConexion()
@@ -182,16 +184,18 @@ class Motocicleta:
         finally:
             conexion.cerrarConexion()
 
+    @classmethod
     def modificar_moto(self):
         conexion = Conexiones()
         conexion.abrirConexion()
+        print('hola')
         try:
-            conexion.miCursor.execute("UPDATE MOTOCICLETA SET precio=(precio - ((precio*10)/100))")
+            conexion.miCursor.execute("UPDATE MOTOCICLETA SET precio=precio+(precio*0.1) where precio='{}'".format(self.precio))
             conexion.miConexion.commit()
-            print("Motocicleta modificado correctamente")
+            print("Se aumentó el precio en un 10%")
             input()
         except:
-            print('Error al actualizar una monoticleta')
+            print('Error al actualizar precio de monoticleta')
         finally:
             conexion.cerrarConexion() 
 
